@@ -1,8 +1,8 @@
 import axios from 'axios';
-import { ROOT_API, API_KEY, QUERY_STR } from '../config';
+import {EOD_API, API_KEY} from '../config';
 
-function fetchData(ticker) {
+function fetchData(ticker, queryStr) {
     return axios.get(
-        ROOT_API + ticker + QUERY_STR + API_KEY
+        EOD_API + ticker + queryStr + API_KEY
     );
 }
