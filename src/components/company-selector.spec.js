@@ -16,7 +16,8 @@ describe('<CompanySelector />', () => {
         expect(component.exists()).toEqual(true)
     })
     it('should render company list', () => {
-        
+        const component = setUp();
+
     })
 });
 
