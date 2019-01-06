@@ -11,6 +11,7 @@ class App extends Component {
     ticker: 'HD',
     startDate: moment().subtract(7, 'days'),
     endDate: moment(),
+    error: null,
   };
 
   componentDidMount() {
@@ -18,14 +19,25 @@ class App extends Component {
     const start = startDate.format('YYYY-MM-DD');
     const end = endDate.format('YYYY-MM-DD');
     FetchDataDateRange(ticker, start, end)
-        .catch(e => {
-          throw e
+        .catch(error => {
+          this.setState({error})
+          throw error
         })
-        .then(res => this.setState({data: res}))
+        .then(res => this.setState({data: res.data.dataset}))
 
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
+    const {ticker, startDate, endDate} = this.state;
+    if (ticker !== prevState.ticker || startDate !== prevState.startDate || endDate !== prevState.endDate) {
+      const start = startDate.format('YYYY-MM-DD');
+      const end = endDate.format('YYYY-MM-DD');
+      FetchDataDateRange(ticker, start, end)
+          .catch(e => {
+            throw e
+          })
+          .then(res => this.setState({data: res}))
+    }
   }
 
   handleOnTickers = ticker => {
