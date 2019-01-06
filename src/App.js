@@ -16,19 +16,21 @@ class App extends Component {
     error: null,
   };
 
+    getData = (ticker, start, end) => FetchDataDateRange(ticker, start, end)
+        .catch(error => {
+            this.setState({error});
+            throw error
+        })
+        .then(res => this.setState({
+            data: res.data.dataset,
+            minDate: res.data.dataset.oldest_available_date,
+        }));
+
   componentDidMount() {
     const {ticker, startDate, endDate} = this.state;
     const start = startDate.format('YYYY-MM-DD');
     const end = endDate.format('YYYY-MM-DD');
-    FetchDataDateRange(ticker, start, end)
-        .catch(error => {
-          this.setState({error});
-          throw error
-        })
-        .then(res => this.setState({
-          data: res.data.dataset,
-          minDate: res.data.dataset.oldest_available_date,
-        }))
+      return this.getData(ticker, start, end);
 
   }
 
@@ -37,15 +39,7 @@ class App extends Component {
     if (ticker !== prevState.ticker || startDate !== prevState.startDate || endDate !== prevState.endDate) {
       const start = startDate.format('YYYY-MM-DD');
       const end = endDate.format('YYYY-MM-DD');
-      FetchDataDateRange(ticker, start, end)
-          .catch(error => {
-            this.setState({error});
-            throw error
-          })
-          .then(res => this.setState({
-            data: res.data.dataset,
-            minDate: res.data.dataset.oldest_available_date,
-          }))
+        return this.getData(ticker, start, end);
     }
   }
 
