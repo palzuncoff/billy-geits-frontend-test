@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {DatePicker} from 'antd';
 import PropTypes from 'prop-types';
+import moment from 'moment';
 import 'antd/dist/antd.css';
 
 class TimeRangeSelector extends Component {
@@ -11,19 +12,19 @@ class TimeRangeSelector extends Component {
         this.props.handleOnSelect('endDate', val)
     };
     disabledStartDate = (startValue) => {
-        const endValue = this.props.endDate;
-        if (!startValue || !endValue) {
+        const {endDate, minDate} = this.props;
+        if (!startValue || !endDate) {
             return false;
         }
-        return startValue.valueOf() > endValue.valueOf();
+        return startValue.valueOf() > endDate.valueOf() || startValue.valueOf() < moment(minDate).valueOf();
     };
 
     disabledEndDate = (endValue) => {
-        const startValue = this.props.startDate;
-        if (!endValue || !startValue) {
+        const {startDate} = this.props;
+        if (!endValue || !startDate) {
             return false;
         }
-        return endValue.valueOf() <= startValue.valueOf();
+        return endValue.valueOf() <= startDate.valueOf() || endValue.valueOf() > moment().valueOf();
     };
 
     render() {
@@ -53,6 +54,7 @@ TimeRangeSelector.propTypes = {
     handleOnSelect: PropTypes.func,
     startDate: PropTypes.shape({}),
     endDate: PropTypes.shape({}),
+    minDate: PropTypes.string,
 };
 
 export default TimeRangeSelector;

@@ -3,12 +3,14 @@ import moment from 'moment';
 import CompanySelector from './components/company-selector';
 import TimeRangeSelector from './components/time-range-selector';
 import {FetchDataDateRange} from './utils';
+import {MIN_DATE} from './constants';
 import './App.css';
 
 class App extends Component {
   state = {
     data: null,
     ticker: 'HD',
+    minDate: MIN_DATE,
     startDate: moment().subtract(7, 'days'),
     endDate: moment(),
     error: null,
@@ -20,10 +22,13 @@ class App extends Component {
     const end = endDate.format('YYYY-MM-DD');
     FetchDataDateRange(ticker, start, end)
         .catch(error => {
-          this.setState({error})
+          this.setState({error});
           throw error
         })
-        .then(res => this.setState({data: res.data.dataset}))
+        .then(res => this.setState({
+          data: res.data.dataset,
+          minDate: res.data.dataset.oldest_available_date,
+        }))
 
   }
 
@@ -33,10 +38,14 @@ class App extends Component {
       const start = startDate.format('YYYY-MM-DD');
       const end = endDate.format('YYYY-MM-DD');
       FetchDataDateRange(ticker, start, end)
-          .catch(e => {
-            throw e
+          .catch(error => {
+            this.setState({error});
+            throw error
           })
-          .then(res => this.setState({data: res}))
+          .then(res => this.setState({
+            data: res.data.dataset,
+            minDate: res.data.dataset.oldest_available_date,
+          }))
     }
   }
 
@@ -54,6 +63,7 @@ class App extends Component {
             startDate={this.state.startDate}
             endDate={this.state.endDate}
             handleOnSelect={this.handleOnDate}
+            minDate={this.state.minDate}
         />
       </div>
     );

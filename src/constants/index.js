@@ -1,0 +1,1 @@
+export const MIN_DATE = '1215-12-25';
