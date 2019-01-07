@@ -3,6 +3,7 @@ import moment from 'moment';
 import CompanySelector from './components/company-selector';
 import TimeRangeSelector from './components/time-range-selector';
 import BarChart from './components/bar-chart';
+import LineChart from './components/line-chart';
 import {FetchDataDateRange} from './utils';
 import {MIN_DATE} from './constants';
 import './App.css';
@@ -10,31 +11,22 @@ import './App.css';
 const transport = (dataset) => {
     if (!dataset) return [];
     const {column_names, data} = dataset;
-    const result = column_names.slice(0, 5).map((column, index) => {
+    return column_names.map((column, index) => {
         return {
             label: column,
             values: data.reduce((acc, row) => {
                 const value = row[index];
-                acc.push({x: row[0], y: +value})
+                acc.push({x: row[0], y: +value});
                 return acc;
             }, []),
         }
-    })
-    result[0] = {
-        label: 'Open',
-        values: data.reduce((acc, item) => {
-            const [date, open, high, low, closed] = item;
-            acc.push({x: date, y: +open})
-            return acc;
-        }, []),
-    };
-    return result;
+    });
 };
 
 class App extends Component {
   state = {
     data: null,
-    ticker: 'HD',
+      ticker: 'MSFT',
     minDate: MIN_DATE,
     startDate: moment().subtract(7, 'days'),
     endDate: moment(),
@@ -87,6 +79,7 @@ class App extends Component {
             minDate={this.state.minDate}
         />
           <BarChart data={this.state.data}/>
+          <LineChart data={this.state.data}/>
       </div>
     );
   }

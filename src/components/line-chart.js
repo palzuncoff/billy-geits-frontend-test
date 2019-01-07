@@ -2,12 +2,12 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import * as ReactD3 from 'react-d3-components';
 
-class BarChart extends Component {
+class LineChart extends Component {
     render() {
         const {data = []} = this.props;
         return (
-            <ReactD3.BarChart
-                groupedBars
+            <ReactD3.LineChart
+                className="LineChart"
                 data={data}
                 width={window.innerWidth}
                 height={400}
@@ -19,8 +19,8 @@ class BarChart extends Component {
     }
 }
 
-BarChart.propTypes = {
+LineChart.propTypes = {
     data: PropTypes.arrayOf(PropTypes.shape({}))
 };
 
-export default BarChart;
+export default LineChart;
