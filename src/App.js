@@ -5,6 +5,7 @@ import TimeRangeSelector from './components/time-range-selector';
 import BarChart from './components/bar-chart';
 import LineChart from './components/line-chart';
 import Description from './components/description';
+import Legend from './components/legend';
 import {FetchDataDateRange} from './utils';
 import {MIN_DATE} from './constants';
 import './App.css';
@@ -28,6 +29,7 @@ class App extends Component {
   state = {
       lineChart: false,
       description: '',
+      labels: [],
     data: null,
       ticker: 'MSFT',
     minDate: MIN_DATE,
@@ -45,6 +47,7 @@ class App extends Component {
             data: transport(res.data.dataset),
             minDate: res.data.dataset.oldest_available_date,
             description: res.data.dataset.description,
+            labels: res.data.dataset.column_names,
         }));
 
   componentDidMount() {
@@ -91,6 +94,7 @@ class App extends Component {
                 {this.state.lineChart ?
                     <LineChart data={this.state.data}/>
                     : <BarChart data={this.state.data}/>}
+                {this.state.labels.length > 0 && <Legend labels={this.state.labels}/>}
                 <Description text={this.state.description}/>
             </div>
         );
