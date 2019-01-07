@@ -2,9 +2,34 @@ import React, { Component } from 'react';
 import moment from 'moment';
 import CompanySelector from './components/company-selector';
 import TimeRangeSelector from './components/time-range-selector';
+import BarChart from './components/bar-chart';
 import {FetchDataDateRange} from './utils';
 import {MIN_DATE} from './constants';
 import './App.css';
+
+const transport = (dataset) => {
+    if (!dataset) return [];
+    const {column_names, data} = dataset;
+    const result = column_names.slice(0, 5).map((column, index) => {
+        return {
+            label: column,
+            values: data.reduce((acc, row) => {
+                const value = row[index];
+                acc.push({x: row[0], y: +value})
+                return acc;
+            }, []),
+        }
+    })
+    result[0] = {
+        label: 'Open',
+        values: data.reduce((acc, item) => {
+            const [date, open, high, low, closed] = item;
+            acc.push({x: date, y: +open})
+            return acc;
+        }, []),
+    };
+    return result;
+};
 
 class App extends Component {
   state = {
@@ -22,7 +47,7 @@ class App extends Component {
             throw error
         })
         .then(res => this.setState({
-            data: res.data.dataset,
+            data: transport(res.data.dataset),
             minDate: res.data.dataset.oldest_available_date,
         }));
 
@@ -46,10 +71,12 @@ class App extends Component {
   handleOnTickers = ticker => {
     this.setState({ticker})
   };
+
   handleOnDate = (prop, val) => {
     this.setState({[prop]: val})
   };
-  render() {
+
+    render() {
     return (
       <div className="App">
         <CompanySelector handleOnSelect={this.handleOnTickers}/>
@@ -59,6 +86,7 @@ class App extends Component {
             handleOnSelect={this.handleOnDate}
             minDate={this.state.minDate}
         />
+          <BarChart data={this.state.data}/>
       </div>
     );
   }
