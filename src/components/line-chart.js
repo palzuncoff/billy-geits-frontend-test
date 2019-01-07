@@ -4,20 +4,23 @@ import * as ReactD3 from 'react-d3-components';
 
 class LineChart extends Component {
     render() {
-        const {data = []} = this.props;
+        const {data} = this.props;
         return (
             <ReactD3.LineChart
-                className="LineChart"
                 data={data}
                 width={window.innerWidth}
                 height={400}
                 margin={{top: 10, bottom: 50, left: 50, right: 10}}
-                xAxis={{label: "days"}}
+                xAxis={{label: "days", tickValues: [null]}}
                 yAxis={{label: "$"}}
             />
         );
     }
 }
+
+LineChart.defaultProps = {
+    data: [],
+};
 
 LineChart.propTypes = {
     data: PropTypes.arrayOf(PropTypes.shape({}))

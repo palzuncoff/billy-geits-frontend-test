@@ -4,7 +4,7 @@ import * as ReactD3 from 'react-d3-components';
 
 class BarChart extends Component {
     render() {
-        const {data = []} = this.props;
+        const {data} = this.props;
         return (
             <ReactD3.BarChart
                 groupedBars
@@ -12,12 +12,16 @@ class BarChart extends Component {
                 width={window.innerWidth}
                 height={400}
                 margin={{top: 10, bottom: 50, left: 50, right: 10}}
-                xAxis={{label: "days"}}
+                xAxis={{label: "days", tickValues: [null]}}
                 yAxis={{label: "$"}}
             />
         );
     }
 }
+
+BarChart.defaultProps = {
+    data: [],
+};
 
 BarChart.propTypes = {
     data: PropTypes.arrayOf(PropTypes.shape({}))

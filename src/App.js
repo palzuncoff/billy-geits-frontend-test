@@ -17,7 +17,7 @@ const transport = (dataset) => {
             label: column,
             values: data.reduce((acc, row) => {
                 const value = row[index];
-                acc.unshift({x: row[0].split('-')[2], y: +value});
+                acc.unshift({x: row[0], y: +value});
                 return acc;
             }, []),
         }
@@ -26,6 +26,7 @@ const transport = (dataset) => {
 
 class App extends Component {
   state = {
+      lineChart: false,
       description: '',
     data: null,
       ticker: 'MSFT',
@@ -71,21 +72,28 @@ class App extends Component {
     this.setState({[prop]: val})
   };
 
+
     render() {
-    return (
-      <div className="App">
-        <CompanySelector handleOnSelect={this.handleOnTickers}/>
-        <TimeRangeSelector
-            startDate={this.state.startDate}
-            endDate={this.state.endDate}
-            handleOnSelect={this.handleOnDate}
-            minDate={this.state.minDate}
-        />
-          <BarChart data={this.state.data}/>
-          <LineChart data={this.state.data}/>
-          <Description text={this.state.description}/>
-      </div>
-    );
+        return (
+            <div className="App">
+                <CompanySelector handleOnSelect={this.handleOnTickers}/>
+                <TimeRangeSelector
+                    startDate={this.state.startDate}
+                    endDate={this.state.endDate}
+                    handleOnSelect={this.handleOnDate}
+                    minDate={this.state.minDate}
+                />
+                <button
+                    onClick={() => this.setState({lineChart: !this.state.lineChart})}
+                >
+                    Chart View
+                </button>
+                {this.state.lineChart ?
+                    <LineChart data={this.state.data}/>
+                    : <BarChart data={this.state.data}/>}
+                <Description text={this.state.description}/>
+            </div>
+        );
   }
 }
 
