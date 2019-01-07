@@ -4,6 +4,7 @@ import CompanySelector from './components/company-selector';
 import TimeRangeSelector from './components/time-range-selector';
 import BarChart from './components/bar-chart';
 import LineChart from './components/line-chart';
+import Description from './components/description';
 import {FetchDataDateRange} from './utils';
 import {MIN_DATE} from './constants';
 import './App.css';
@@ -16,15 +17,16 @@ const transport = (dataset) => {
             label: column,
             values: data.reduce((acc, row) => {
                 const value = row[index];
-                acc.push({x: row[0], y: +value});
+                acc.unshift({x: row[0].split('-')[2], y: +value});
                 return acc;
             }, []),
         }
-    });
+    }).slice(1, 5);
 };
 
 class App extends Component {
   state = {
+      description: '',
     data: null,
       ticker: 'MSFT',
     minDate: MIN_DATE,
@@ -41,6 +43,7 @@ class App extends Component {
         .then(res => this.setState({
             data: transport(res.data.dataset),
             minDate: res.data.dataset.oldest_available_date,
+            description: res.data.dataset.description,
         }));
 
   componentDidMount() {
@@ -80,6 +83,7 @@ class App extends Component {
         />
           <BarChart data={this.state.data}/>
           <LineChart data={this.state.data}/>
+          <Description text={this.state.description}/>
       </div>
     );
   }

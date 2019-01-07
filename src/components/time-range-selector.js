@@ -33,14 +33,12 @@ class TimeRangeSelector extends Component {
             <div>
                 <DatePicker
                     disabledDate={this.disabledStartDate}
-                    showTime
                     format="YYYY-MM-DD"
                     value={startDate}
                     onChange={this.onStartChange}
                 />
                 <DatePicker
                     disabledDate={this.disabledEndDate}
-                    showTime
                     format="YYYY-MM-DD"
                     value={endDate}
                     onChange={this.onEndChange}

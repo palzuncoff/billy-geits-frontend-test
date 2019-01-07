@@ -12,7 +12,7 @@ class BarChart extends Component {
                 width={window.innerWidth}
                 height={400}
                 margin={{top: 10, bottom: 50, left: 50, right: 10}}
-                xAxis={{label: "date"}}
+                xAxis={{label: "days"}}
                 yAxis={{label: "$"}}
             />
         );
