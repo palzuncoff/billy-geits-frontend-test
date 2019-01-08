@@ -26,7 +26,7 @@ describe('<CompanySelector />', () => {
         const component = setUp({handleOnSelect: spy});
         expect(selected).toEqual('')
         component.find('.option-test-class').at(0).simulate('change');
-        expect(selected).toEqual('A')
+        expect(selected).toEqual('MSFT')
     })
 });
 
