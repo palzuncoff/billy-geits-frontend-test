@@ -12,7 +12,9 @@ import './App.css';
 
 const transport = (dataset) => {
     if (!dataset) return [];
+    
     const {column_names, data} = dataset;
+
     return column_names.map((column, index) => {
         return {
             label: column,
@@ -26,17 +28,17 @@ const transport = (dataset) => {
 };
 
 class App extends Component {
-  state = {
-      lineChart: false,
-      description: '',
-      labels: [],
-    data: null,
-      ticker: 'MSFT',
-    minDate: MIN_DATE,
-    startDate: moment().subtract(7, 'days'),
-    endDate: moment(),
-    error: null,
-  };
+    state = {
+        lineChart: false,
+        description: '',
+        labels: [],
+        data: null,
+        ticker: 'MSFT',
+        minDate: MIN_DATE,
+        startDate: moment().subtract(7, 'days'),
+        endDate: moment(),
+        error: null,
+    };
 
     getData = (ticker, start, end) => FetchDataDateRange(ticker, start, end)
         .catch(error => {
@@ -50,30 +52,33 @@ class App extends Component {
             labels: res.data.dataset.column_names,
         }));
 
-  componentDidMount() {
-    const {ticker, startDate, endDate} = this.state;
-    const start = startDate.format('YYYY-MM-DD');
-    const end = endDate.format('YYYY-MM-DD');
-      return this.getData(ticker, start, end);
+    componentDidMount() {
+        const {ticker, startDate, endDate} = this.state;
+        const start = startDate.format('YYYY-MM-DD');
+        const end = endDate.format('YYYY-MM-DD');
 
-  }
-
-  componentDidUpdate(prevProps, prevState, snapshot) {
-    const {ticker, startDate, endDate} = this.state;
-    if (ticker !== prevState.ticker || startDate !== prevState.startDate || endDate !== prevState.endDate) {
-      const start = startDate.format('YYYY-MM-DD');
-      const end = endDate.format('YYYY-MM-DD');
         return this.getData(ticker, start, end);
+
     }
-  }
 
-  handleOnTickers = ticker => {
-    this.setState({ticker})
-  };
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        const {ticker, startDate, endDate} = this.state;
 
-  handleOnDate = (prop, val) => {
-    this.setState({[prop]: val})
-  };
+        if (ticker !== prevState.ticker || startDate !== prevState.startDate || endDate !== prevState.endDate) {
+            const start = startDate.format('YYYY-MM-DD');
+            const end = endDate.format('YYYY-MM-DD');
+
+            return this.getData(ticker, start, end);
+        }
+    }
+
+    handleOnTickers = ticker => {
+        this.setState({ticker})
+    };
+
+    handleOnDate = (prop, val) => {
+        this.setState({[prop]: val})
+    };
 
 
     render() {
@@ -98,7 +103,7 @@ class App extends Component {
                 <Description text={this.state.description}/>
             </div>
         );
-  }
+    }
 }
 
 export default App;
